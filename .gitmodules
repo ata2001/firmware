@@ -10,3 +10,6 @@
 [submodule "lib/agent"]
 	path = lib/agent
 	url = https://github.com/UltimateHackingKeyboard/agent.git
+[submodule "lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4"]
+	path = lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4
+	url = https://github.com/UltimateHackingKeyboard/MCUXpresso_SDK_2.2_MKL03Z32xxx4.git

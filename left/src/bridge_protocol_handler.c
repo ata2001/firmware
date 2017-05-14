@@ -8,6 +8,10 @@
 #include "main.h"
 #include "init_peripherials.h"
 
+uint8_t BridgeRxBuffer[BRIDGE_RX_BUFFER_SIZE];
+uint8_t BridgeTxBuffer[BRIDGE_TX_BUFFER_SIZE];
+uint8_t BridgeTxSize;
+
 void SetError(uint8_t error);
 void SetGenericError();
 void SetResponseByte(uint8_t response);

@@ -15,9 +15,9 @@
 
 // Variables:
 
-    uint8_t BridgeRxBuffer[BRIDGE_RX_BUFFER_SIZE];
-    uint8_t BridgeTxBuffer[BRIDGE_TX_BUFFER_SIZE];
-    uint8_t BridgeTxSize;
+    extern uint8_t BridgeRxBuffer[BRIDGE_RX_BUFFER_SIZE];
+    extern uint8_t BridgeTxBuffer[BRIDGE_TX_BUFFER_SIZE];
+    extern uint8_t BridgeTxSize;
 
 // Functions:
 

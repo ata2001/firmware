@@ -241,8 +241,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="iar/|utilities/|arm/|cmsis_drivers/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="MK22F51212"/>
+						<entry excluding="iar/|utilities/|arm/|cmsis_drivers/|gcc/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="MK22F51212"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="shared"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
+						<entry excluding="host/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="usb_1.6.3"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -588,4 +590,5 @@
 		<core>cm4</core>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="refreshScope"/>
 </cproject>

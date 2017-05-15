@@ -65,8 +65,9 @@
 								<option id="gnu.c.compiler.option.dialect.flags.2000341989" name="Other dialect flags" superClass="gnu.c.compiler.option.dialect.flags"/>
 								<option id="gnu.c.compiler.option.preprocessor.nostdinc.1369719007" name="Do not search system directories (-nostdinc)" superClass="gnu.c.compiler.option.preprocessor.nostdinc"/>
 								<option id="gnu.c.compiler.option.preprocessor.preprocess.1453640877" name="Preprocess only (-E)" superClass="gnu.c.compiler.option.preprocessor.preprocess"/>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.946545613" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.946545613" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="CR_INTEGER_PRINTF"/>
+									<listOptionValue builtIn="false" value="UHK_PCB_MAJOR_VERSION=7"/>
 									<listOptionValue builtIn="false" value="SDK_DEBUGCONSOLE=0"/>
 									<listOptionValue builtIn="false" value="__MCUXPRESSO"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
@@ -225,7 +226,7 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.1557197224" name="Library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.nohost_nf" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.gcc.nanofloat.760130734" name="Enable printf float " superClass="com.crt.advproject.link.gcc.nanofloat"/>
 								<option id="com.crt.advproject.link.gcc.nanofloat.scanf.930839618" name="Enable scanf float " superClass="com.crt.advproject.link.gcc.nanofloat.scanf"/>
-								<option id="com.crt.advproject.link.script.1229281822" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;uhk-right_Debug.ld&quot;" valueType="string"/>
+								<option id="com.crt.advproject.link.script.1229281822" name="Linker script" superClass="com.crt.advproject.link.script" useByScannerDiscovery="false" value="&quot;uhk-right_Debug.ld&quot;" valueType="string"/>
 								<option id="com.crt.advproject.link.scriptdir.49483536" name="Script path" superClass="com.crt.advproject.link.scriptdir"/>
 								<option defaultValue="com.crt.advproject.heapAndStack.mcuXpressoStyle" id="com.crt.advproject.link.memory.heapAndStack.style.69488402" name="Heap and Stack placement" superClass="com.crt.advproject.link.memory.heapAndStack.style" useByScannerDiscovery="false" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1122473274" name="Multicore configuration" superClass="com.crt.advproject.link.gcc.multicore.slave"/>

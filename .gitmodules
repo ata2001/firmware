@@ -13,3 +13,6 @@
 [submodule "lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4"]
 	path = lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4
 	url = https://github.com/UltimateHackingKeyboard/MCUXpresso_SDK_2.2_MKL03Z32xxx4.git
+[submodule "lib/MCUXpresso_SDK_2.2_MK22FN512xxx12"]
+	path = lib/MCUXpresso_SDK_2.2_MK22FN512xxx12
+	url = https://github.com/UltimateHackingKeyboard/MCUXpresso_SDK_2.2_MK22FN512xxx12.git

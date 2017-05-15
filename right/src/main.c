@@ -93,7 +93,7 @@ void UpdateUsbReports()
 
 wormhole_t wormhole;
 
-void main() {
+int main(void) {
     InitPeripherials();
     InitClock();
     Wormhole = &wormhole; // TODO: Remove this as soon as the wormhole stabilizes.

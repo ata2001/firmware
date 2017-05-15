@@ -56,7 +56,7 @@ void SwitchActiveUsbBasicKeyboardReport()
 
 void ResetActiveUsbBasicKeyboardReport()
 {
-    bzero(ActiveUsbBasicKeyboardReport, USB_BASIC_KEYBOARD_REPORT_LENGTH);
+    memset(ActiveUsbBasicKeyboardReport, 0, USB_BASIC_KEYBOARD_REPORT_LENGTH);
 }
 
 static usb_status_t UsbBasicKeyboardAction(void)

@@ -109,7 +109,7 @@ void processTestAction(key_action_t testAction) {
 
 void UpdateActiveUsbReports() {
 
-    bzero(&UsbMouseReport, sizeof(usb_mouse_report_t));
+    memset(&UsbMouseReport, 0, sizeof(usb_mouse_report_t));
 
     uint8_t basicScancodeIndex = 0;
     uint8_t mediaScancodeIndex = 0;

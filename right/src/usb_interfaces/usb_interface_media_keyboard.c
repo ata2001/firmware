@@ -56,7 +56,7 @@ void SwitchActiveUsbMediaKeyboardReport()
 
 void ResetActiveUsbMediaKeyboardReport()
 {
-    bzero(ActiveUsbMediaKeyboardReport, USB_MEDIA_KEYBOARD_REPORT_LENGTH);
+    memset(ActiveUsbMediaKeyboardReport, 0, USB_MEDIA_KEYBOARD_REPORT_LENGTH);
 }
 
 static usb_status_t UsbMediaKeyboardAction(void)

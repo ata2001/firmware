@@ -76,19 +76,19 @@
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.undef.symbol.2042299292" name="Undefined symbols (-U)" superClass="gnu.c.compiler.option.preprocessor.undef.symbol" useByScannerDiscovery="false"/>
 								<option id="gnu.c.compiler.option.include.paths.676240168" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/buspal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/buspal/bm_usb&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/ksdk_usb&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../shared&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/CMSIS/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/CMSIS/Driver/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/devices/MK22F51212&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/devices/MK22F51212/drivers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/devices/MK22F51212/utilities&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/middleware/usb_1.6.3/device&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/middleware/usb_1.6.3/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/middleware/usb_1.6.3/osa&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/buspal}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/buspal/bm_usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ksdk_usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/shared}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/CMSIS/Driver/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/devices/MK22F51212}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/devices/MK22F51212/drivers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/devices/MK22F51212/utilities}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/middleware/usb_1.6.3/device}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/middleware/usb_1.6.3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/middleware/usb_1.6.3/osa}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.files.49367803" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.gcc.exe.debug.option.optimization.level.1872681710" name="Optimization Level" superClass="com.crt.advproject.gcc.exe.debug.option.optimization.level" useByScannerDiscovery="false"/>
@@ -124,7 +124,7 @@
 								<option id="com.crt.advproject.gas.thumb.1060970583" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.crt.advproject.gas.arch.1604697223" name="Architecture" superClass="com.crt.advproject.gas.arch" useByScannerDiscovery="false" value="com.crt.advproject.gas.target.cm4" valueType="enumerated"/>
 								<option id="gnu.both.asm.option.flags.crt.1187602809" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" useByScannerDiscovery="false" value="-c -x assembler-with-cpp -D__REDLIB__" valueType="string"/>
-								<option id="gnu.both.asm.option.include.paths.480130247" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath"/>
+								<option id="gnu.both.asm.option.include.paths.480130247" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false"/>
 								<option id="gnu.both.asm.option.warnings.nowarn.1949507749" name="Suppress warnings (-W)" superClass="gnu.both.asm.option.warnings.nowarn" useByScannerDiscovery="false"/>
 								<option id="gnu.both.asm.option.version.46285189" name="Announce version (-v)" superClass="gnu.both.asm.option.version" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.gas.exe.debug.option.debugging.level.983886641" name="Debug level" superClass="com.crt.advproject.gas.exe.debug.option.debugging.level" useByScannerDiscovery="false"/>
@@ -237,10 +237,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="iar/|utilities/|arm/|cmsis_drivers/|gcc/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="MK22F51212"/>
+						<entry excluding="arm/|cmsis_drivers/|gcc/|iar/|utilities/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="sdk/devices/MK22F51212"/>
+						<entry excluding="host/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="sdk/middleware/usb_1.6.3"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="shared"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
-						<entry excluding="host/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="usb_1.6.3"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -319,19 +319,19 @@
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.undef.symbol.763575449" name="Undefined symbols (-U)" superClass="gnu.c.compiler.option.preprocessor.undef.symbol" useByScannerDiscovery="false"/>
 								<option id="gnu.c.compiler.option.include.paths.1292513457" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/buspal&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/buspal/bm_usb&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/ksdk_usb&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../shared&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/CMSIS/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/CMSIS/Driver/Include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/devices/MK22F51212&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/devices/MK22F51212/drivers&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/devices/MK22F51212/utilities&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/middleware/usb_1.6.3/device&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/middleware/usb_1.6.3/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../lib/MCUXpresso_SDK_2.2_MK22FN512xxx12/middleware/usb_1.6.3/osa&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/buspal}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/buspal/bm_usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/ksdk_usb}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/shared}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/CMSIS/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/CMSIS/Driver/Include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/devices/MK22F51212}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/devices/MK22F51212/drivers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/devices/MK22F51212/utilities}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/middleware/usb_1.6.3/device}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/middleware/usb_1.6.3/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdk/middleware/usb_1.6.3/osa}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.files.1042763498" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" useByScannerDiscovery="false"/>
 								<option id="gnu.c.compiler.option.optimization.flags.1099581538" name="Other optimization flags" superClass="gnu.c.compiler.option.optimization.flags" useByScannerDiscovery="false" value="-fno-common" valueType="string"/>
@@ -365,7 +365,7 @@
 								<option id="com.crt.advproject.gas.thumb.1097741281" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.crt.advproject.gas.arch.1958836161" name="Architecture" superClass="com.crt.advproject.gas.arch" useByScannerDiscovery="false" value="com.crt.advproject.gas.target.cm4" valueType="enumerated"/>
 								<option id="gnu.both.asm.option.flags.crt.147992555" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" useByScannerDiscovery="false" value="-c -x assembler-with-cpp -D__REDLIB__" valueType="string"/>
-								<option id="gnu.both.asm.option.include.paths.457336152" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath"/>
+								<option id="gnu.both.asm.option.include.paths.457336152" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false"/>
 								<option id="gnu.both.asm.option.warnings.nowarn.926610167" name="Suppress warnings (-W)" superClass="gnu.both.asm.option.warnings.nowarn" useByScannerDiscovery="false"/>
 								<option id="gnu.both.asm.option.version.27226526" name="Announce version (-v)" superClass="gnu.both.asm.option.version" useByScannerDiscovery="false"/>
 								<option id="com.crt.advproject.gas.fpu.644431372" name="Floating point" superClass="com.crt.advproject.gas.fpu" useByScannerDiscovery="false" value="com.crt.advproject.gas.fpu.fpv4.hard" valueType="enumerated"/>
@@ -477,10 +477,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="arm/|cmsis_drivers/|gcc/|iar/|utilities/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="MK22F51212"/>
+						<entry excluding="arm/|cmsis_drivers/|gcc/|iar/|utilities/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="sdk/devices/MK22F51212"/>
+						<entry excluding="host/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="sdk/middleware/usb_1.6.3"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="shared"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="src"/>
-						<entry excluding="host/" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="usb_1.6.3"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

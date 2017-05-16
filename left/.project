@@ -26,19 +26,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>MKL03Z4</name>
+			<name>sdk</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4/devices/MKL03Z4</locationURI>
-		</link>
-		<link>
-			<name>drivers</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4/devices/MKL03Z4/drivers</locationURI>
-		</link>
-		<link>
-			<name>mcuxpresso</name>
-			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4/devices/MKL03Z4/mcuxpresso</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/lib/MCUXpresso_SDK_2.2_MKL03Z32xxx4</locationURI>
 		</link>
 		<link>
 			<name>shared</name>

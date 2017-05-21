@@ -2,9 +2,9 @@
 set -e # fail the script if a command fails
 
 firmware_image=`pwd`/$1
-usb_dir=../../../lib/agent/usb
+usb_dir=../lib/agent/usb
 usb_binding=$usb_dir/node_modules/usb/build/Release/usb_bindings.node
-blhost="../../../lib/bootloader/bin/Tools/blhost/linux/amd64/blhost --usb 0x15a2,0x0073"
+blhost="../lib/bootloader/bin/Tools/blhost/linux/amd64/blhost --usb 0x15a2,0x0073"
 
 set -x # echo on
 

@@ -6,21 +6,21 @@
 #include "led_pwm.h"
 #include "bridge_protocol.h"
 #include "main.h"
-#include "init_peripherials.h"
+#include "init_peripherals.h"
 
 uint8_t BridgeRxBuffer[BRIDGE_RX_BUFFER_SIZE];
 uint8_t BridgeTxBuffer[BRIDGE_TX_BUFFER_SIZE];
 uint8_t BridgeTxSize;
 
 void SetError(uint8_t error);
-void SetGenericError();
+void SetGenericError(void);
 void SetResponseByte(uint8_t response);
 
 void SetError(uint8_t error) {
     BridgeTxBuffer[0] = error;
 }
 
-void SetGenericError()
+void SetGenericError(void)
 {
     SetError(PROTOCOL_RESPONSE_GENERIC_ERROR);
 }
@@ -31,7 +31,7 @@ void SetResponseByte(uint8_t response)
     BridgeTxBuffer[1] = response;
 }
 
-void BridgeProtocolHandler()
+void BridgeProtocolHandler(void)
 {
     uint8_t commandId = BridgeRxBuffer[0];
     switch (commandId) {

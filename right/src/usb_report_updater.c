@@ -1,5 +1,5 @@
 #include "main.h"
-#include "action.h"
+#include "key_action.h"
 #include "led_display.h"
 #include "layer.h"
 #include "usb_interfaces/usb_interface_mouse.h"
@@ -10,7 +10,6 @@
 #include "slave_drivers/slave_driver_uhk_module.h"
 #include "led_pwm.h"
 
-static uint8_t activeLayer = LAYER_ID_BASE;
 static uint8_t mouseWheelDivisorCounter = 0;
 static uint8_t mouseSpeedAccelDivisorCounter = 0;
 static uint8_t mouseSpeed = 3;
@@ -28,43 +27,43 @@ void processMouseAction(key_action_t action)
     if (action.mouse.scrollActions) {
         if (mouseWheelDivisorCounter == MOUSE_WHEEL_DIVISOR) {
             mouseWheelDivisorCounter = 0;
-            if (action.mouse.scrollActions & MOUSE_SCROLL_UP) {
+            if (action.mouse.scrollActions & MouseScroll_Up) {
                 UsbMouseReport.wheelX = 1;
             }
-            if (action.mouse.scrollActions & MOUSE_SCROLL_DOWN) {
+            if (action.mouse.scrollActions & MouseScroll_Down) {
                 UsbMouseReport.wheelX = -1;
             }
         }
     }
 
-    if (action.mouse.moveActions & MOUSE_ACCELERATE || action.mouse.moveActions & MOUSE_DECELERATE) {
+    if (action.mouse.moveActions & MouseMove_Accelerate || action.mouse.moveActions & MouseMove_Decelerate) {
         mouseSpeedAccelDivisorCounter++;
 
         if (mouseSpeedAccelDivisorCounter == MOUSE_SPEED_ACCEL_DIVISOR) {
             mouseSpeedAccelDivisorCounter = 0;
 
-            if (action.mouse.moveActions & MOUSE_ACCELERATE) {
+            if (action.mouse.moveActions & MouseMove_Accelerate) {
                 if (mouseSpeed < MOUSE_MAX_SPEED) {
                     mouseSpeed++;
                 }
             }
-            if (action.mouse.moveActions & MOUSE_DECELERATE) {
+            if (action.mouse.moveActions & MouseMove_Decelerate) {
                 if (mouseSpeed > 1) {
                     mouseSpeed--;
                 }
             }
         }
     } else if (action.mouse.moveActions) {
-        if (action.mouse.moveActions & MOUSE_MOVE_LEFT) {
+        if (action.mouse.moveActions & MouseMove_Left) {
             UsbMouseReport.x = -mouseSpeed;
         }
-        if (action.mouse.moveActions & MOUSE_MOVE_RIGHT) {
+        if (action.mouse.moveActions & MouseMove_Right) {
             UsbMouseReport.x = mouseSpeed;
         }
-        if (action.mouse.moveActions & MOUSE_MOVE_UP) {
+        if (action.mouse.moveActions & MouseMove_Up) {
             UsbMouseReport.y = -mouseSpeed;
         }
-        if (action.mouse.moveActions & MOUSE_MOVE_DOWN) {
+        if (action.mouse.moveActions & MouseMove_Down) {
             UsbMouseReport.y = mouseSpeed;
         }
     }
@@ -74,7 +73,8 @@ void processMouseAction(key_action_t action)
     wasPreviousMouseActionWheelAction = isWheelAction;
 }
 
-void processTestAction(key_action_t testAction) {
+void processTestAction(key_action_t testAction)
+{
     switch (testAction.test.testAction) {
     case TestAction_DisableUsb:
         if (kStatus_USB_Success != USB_DeviceClassDeinit(CONTROLLER_ID)) {
@@ -107,7 +107,24 @@ void processTestAction(key_action_t testAction) {
     }
 }
 
-void UpdateActiveUsbReports() {
+uint8_t getActiveLayer()
+{
+    uint8_t activeLayer = LAYER_ID_BASE;
+    for (uint8_t slotId=0; slotId<SLOT_COUNT; slotId++) {
+        for (uint8_t keyId=0; keyId<MAX_KEY_COUNT_PER_MODULE; keyId++) {
+            if (CurrentKeyStates[slotId][keyId]) {
+                key_action_t action = CurrentKeymap[LAYER_ID_BASE][slotId][keyId];
+                if (action.type == KeyActionType_SwitchLayer) {
+                    activeLayer = action.switchLayer.layer;
+                }
+            }
+        }
+    }
+    return activeLayer;
+}
+
+void UpdateActiveUsbReports()
+{
 
     memset(&UsbMouseReport, 0, sizeof(usb_mouse_report_t));
 
@@ -115,17 +132,9 @@ void UpdateActiveUsbReports() {
     uint8_t mediaScancodeIndex = 0;
     uint8_t systemScancodeIndex = 0;
 
-    activeLayer = LAYER_ID_BASE;
-    for (uint8_t slotId=0; slotId<SLOT_COUNT; slotId++) {
-        for (uint8_t keyId=0; keyId<MAX_KEY_COUNT_PER_MODULE; keyId++) {
-            if (CurrentKeyStates[slotId][keyId]) {
-                key_action_t action = CurrentKeymap[LAYER_ID_BASE][slotId][keyId];
-                if (action.type == KEY_ACTION_SWITCH_LAYER) {
-                    activeLayer = action.switchLayer.layer;
-                }
-            }
-        }
-    }
+    static uint8_t previousLayer = LAYER_ID_BASE;
+    static uint8_t previousModifiers = 0;
+    uint8_t activeLayer = getActiveLayer();
 
     for (uint8_t slotId=0; slotId<SLOT_COUNT; slotId++) {
         for (uint8_t keyId=0; keyId<MAX_KEY_COUNT_PER_MODULE; keyId++) {
@@ -136,23 +145,23 @@ void UpdateActiveUsbReports() {
 
             key_action_t action = CurrentKeymap[activeLayer][slotId][keyId];
             switch (action.type) {
-                case KEY_ACTION_KEYSTROKE:
+                case KeyActionType_Keystroke:
                     ActiveUsbBasicKeyboardReport->modifiers |= action.keystroke.modifiers;
 
                     switch (action.keystroke.keystrokeType) {
-                        case KEYSTROKE_BASIC:
+                        case KeystrokeType_Basic:
                             if (basicScancodeIndex >= USB_BASIC_KEYBOARD_MAX_KEYS) {
                                 break;
                             }
                             ActiveUsbBasicKeyboardReport->scancodes[basicScancodeIndex++] = action.keystroke.scancode;
                             break;
-                        case KEYSTROKE_MEDIA:
+                        case KeystrokeType_Media:
                             if (mediaScancodeIndex >= USB_MEDIA_KEYBOARD_MAX_KEYS) {
                                 break;
                             }
                             ActiveUsbMediaKeyboardReport->scancodes[mediaScancodeIndex++] = action.keystroke.scancode;
                             break;
-                        case KEYSTROKE_SYSTEM:
+                        case KeystrokeType_System:
                             if (systemScancodeIndex >= USB_SYSTEM_KEYBOARD_MAX_KEYS) {
                                 break;
                             }
@@ -160,13 +169,23 @@ void UpdateActiveUsbReports() {
                             break;
                     }
                     break;
-                case KEY_ACTION_MOUSE:
+                case KeyActionType_Mouse:
                     processMouseAction(action);
                     break;
-                case KEY_ACTION_TEST:
+                case KeyActionType_Test:
                     processTestAction(action);
                     break;
             }
         }
     }
+
+    // When a layer switcher key gets pressed along with another key that produces some modifiers
+    // and the accomanying key gets released then keep the related modifiers active a long as the
+    // layer switcher key stays pressed.  Useful for Alt+Tab keymappings and the like.
+    if (activeLayer != LAYER_ID_BASE && activeLayer == previousLayer && basicScancodeIndex == 0) {
+        ActiveUsbBasicKeyboardReport->modifiers |= previousModifiers;
+    }
+
+    previousLayer = activeLayer;
+    previousModifiers = ActiveUsbBasicKeyboardReport->modifiers;
 }

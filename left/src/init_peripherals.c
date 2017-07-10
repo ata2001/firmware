@@ -7,21 +7,21 @@
 #include "fsl_clock.h"
 #include "i2c.h"
 #include "led_pwm.h"
-#include "bridge_protocol_handler.h"
+#include "slave_protocol_handler.h"
 
 static void i2cSlaveCallback(I2C_Type *base, i2c_slave_transfer_t *xfer, void *userData)
 {
     switch (xfer->event)
     {
         case kI2C_SlaveTransmitEvent:
-            BridgeProtocolHandler();
-            xfer->data = BridgeTxBuffer;
-            xfer->dataSize = BridgeTxSize;
+            SlaveProtocolHandler();
+            xfer->data = SlaveTxBuffer;
+            xfer->dataSize = SlaveTxSize;
             break;
         case kI2C_SlaveReceiveEvent:
-            BridgeProtocolHandler();
-            xfer->data = BridgeRxBuffer;
-            xfer->dataSize = BRIDGE_RX_BUFFER_SIZE;
+            SlaveProtocolHandler();
+            xfer->data = SlaveRxBuffer;
+            xfer->dataSize = SLAVE_RX_BUFFER_SIZE;
             break;
         case kI2C_SlaveCompletionEvent:
             xfer->data = NULL;

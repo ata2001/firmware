@@ -4,8 +4,8 @@
 #include "i2c_addresses.h"
 #include "led_driver.h"
 #include "peripherals/merge_sensor.h"
-#include "deserialize.h"
-#include "config_buffer.h"
+#include "config/parse_config.h"
+#include "config/config_state.h"
 #include "led_pwm.h"
 #include "slave_scheduler.h"
 #include "slave_drivers/slave_driver_uhk_module.h"
@@ -16,7 +16,7 @@ void setError(uint8_t error);
 void setGenericError();
 void usbProtocolHandler();
 void getSystemProperty();
-void jumpToBootloader();
+void reenumerate();
 void setTestLed();
 void writeLedDriver();
 void readLedDriver();
@@ -55,8 +55,8 @@ void usbProtocolHandler()
         case USB_COMMAND_GET_SYSTEM_PROPERTY:
             getSystemProperty();
             break;
-        case USB_COMMAND_JUMP_TO_BOOTLOADER:
-            jumpToBootloader();
+        case USB_COMMAND_REENUMERATE:
+            reenumerate();
             break;
         case USB_COMMAND_SET_TEST_LED:
             setTestLed();
@@ -114,8 +114,9 @@ void getSystemProperty() {
     }
 }
 
-void jumpToBootloader() {
-//    Wormhole->magicNumber = WORMHOLE_MAGIC_NUMBER;
+void reenumerate() {
+    Wormhole.magicNumber = WORMHOLE_MAGIC_NUMBER;
+    Wormhole.enumerationMode = GenericHidInBuffer[1];
     SCB->AIRCR = 0x5FA<<SCB_AIRCR_VECTKEY_Pos | SCB_AIRCR_SYSRESETREQ_Msk; // Reset the MCU.
     for (;;);
 }
@@ -187,12 +188,15 @@ void uploadConfig()
         return;
     }
 
-    memcpy(ConfigBuffer+memoryOffset, GenericHidInBuffer+4, byteCount);
+    memcpy(ConfigBuffer.buffer+memoryOffset, GenericHidInBuffer+4, byteCount);
 }
 
 void applyConfig()
 {
-    deserialize_Layer(ConfigBuffer, 0);
+    ConfigBuffer.offset = 0;
+    GenericHidOutBuffer[0] = ParseConfig(&ConfigBuffer);
+    GenericHidOutBuffer[1] = ConfigBuffer.offset;
+    GenericHidOutBuffer[2] = ConfigBuffer.offset >> 8;
 }
 
 void setLedPwm()
@@ -204,5 +208,9 @@ void setLedPwm()
 
 void getAdcValue(void)
 {
-    *((uint32_t*)GenericHidOutBuffer) = ADC_Measure();
+    uint32_t adcValue = ADC_Measure();
+    GenericHidOutBuffer[0] = adcValue >> 0;
+    GenericHidOutBuffer[1] = adcValue >> 8;
+    GenericHidOutBuffer[2] = adcValue >> 16;
+    GenericHidOutBuffer[3] = adcValue >> 24;
 }

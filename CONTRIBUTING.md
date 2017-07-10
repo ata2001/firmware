@@ -10,10 +10,17 @@
 
 ## Naming identifiers
 
-Functions are written with UpperCamelCase and verb is followed by noun.
+Extern functions and variables are written with UpperCamelCase, non-extern functions and variables are written with lowerCamelCase.
+
+Function names are composed of a verb followed by a noun.
+
+Non-extern functions must be declared as static.
 
 ```
-DoThis();
+DoThisExtern();
+static doThisNonExtern();
+uint8 ExternVariable;
+uint8 nonExternVariable;
 ```
 
 Whenever a file exposes a group of functions as a consistent API, their function names should be prefixed with the group name, followed by `_`, followed by the individual function names.
@@ -22,12 +29,6 @@ Whenever a file exposes a group of functions as a consistent API, their function
 void LedDriver_WriteBuffer(uint8_t i2cAddress, uint8_t buffer[], uint8_t size);
 void LedDriver_WriteRegister(uint8_t i2cAddress, uint8_t reg, uint8_t val);
 void LedDriver_SetAllLedsTo(uint8_t val);
-```
-
-Non-function scoped variables are written with UpperCamelCase.
-
-```
-uint8_t OuterVariable;
 ```
 
 Function scoped variables and function parameters are written with lowerCamelCase.
@@ -59,7 +60,7 @@ if (something) {
     ...
 }
 
-for (uint8_t i; i<j; i++) {
+for (uint8_t i = 0; i < j; i++) {
     ...
 }
 
@@ -71,7 +72,7 @@ while (condition) {
 ## Function declaration
 
 ```
-void do_this()
+void doThis()
 {
     ...
 }
@@ -103,9 +104,11 @@ Header files are composed of sections. The order of sections is fixed. Every hea
 
 // Typedefs:
 
-    typedef struct {
-        ...
-    } led_driver_state_t;
+    typedef enum {
+        KeystrokeType_Basic,
+        KeystrokeType_Media,
+        KeystrokeType_System,
+    } keystroke_type_t;
 
 // Variables:
 
@@ -122,4 +125,4 @@ Header files are composed of sections. The order of sections is fixed. Every hea
 
 ## Semantics
 
-The build process must not yield any warnings.
+The build process must not yield any warnings, and the build must pass [on Travis](https://travis-ci.org/UltimateHackingKeyboard/firmware).

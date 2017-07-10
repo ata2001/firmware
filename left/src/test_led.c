@@ -1,5 +1,6 @@
 #include "test_led.h"
 #include "fsl_port.h"
+#include "fsl_gpio.h"
 
 extern void InitTestLed(void)
 {

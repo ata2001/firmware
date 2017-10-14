@@ -4,6 +4,7 @@
 // Includes:
 
     #include "fsl_common.h"
+    #include "attributes.h"
     #include "usb_api.h"
     #include "usb_descriptors/usb_descriptor_basic_keyboard_report.h"
 
@@ -26,7 +27,7 @@
         uint8_t modifiers;
         uint8_t reserved; // Always must be 0
         uint8_t scancodes[USB_BASIC_KEYBOARD_MAX_KEYS];
-    } __attribute__ ((packed)) usb_basic_keyboard_report_t;
+    } ATTR_PACKED usb_basic_keyboard_report_t;
 
 // Variables:
 
@@ -36,11 +37,11 @@
 
 // Functions:
 
-    extern usb_status_t UsbBasicKeyboardCallback(class_handle_t handle, uint32_t event, void *param);
-    extern usb_status_t UsbBasicKeyboardSetConfiguration(class_handle_t handle, uint8_t configuration);
-    extern usb_status_t UsbBasicKeyboardSetInterface(class_handle_t handle, uint8_t interface, uint8_t alternateSetting);
+    usb_status_t UsbBasicKeyboardCallback(class_handle_t handle, uint32_t event, void *param);
+    usb_status_t UsbBasicKeyboardSetConfiguration(class_handle_t handle, uint8_t configuration);
+    usb_status_t UsbBasicKeyboardSetInterface(class_handle_t handle, uint8_t interface, uint8_t alternateSetting);
 
-    extern void ResetActiveUsbBasicKeyboardReport();
-    extern void SwitchActiveUsbBasicKeyboardReport();
+    void ResetActiveUsbBasicKeyboardReport(void);
+    void SwitchActiveUsbBasicKeyboardReport(void);
 
 #endif

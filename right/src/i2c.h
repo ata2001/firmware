@@ -4,6 +4,7 @@
 // Includes:
 
     #include "fsl_i2c.h"
+    #include "slave_protocol.h"
 
 // Macros:
 
@@ -14,10 +15,12 @@
     #define I2C_MAIN_BUS_BAUD_RATE 100000 // 100 kHz works even with a 20 meter long bridge cable.
     #define I2C_MAIN_BUS_MUX       kPORT_MuxAlt7
 
+    #define I2C_MAIN_BUS_SDA_GPIO  GPIOD
     #define I2C_MAIN_BUS_SDA_PORT  PORTD
     #define I2C_MAIN_BUS_SDA_CLOCK kCLOCK_PortD
     #define I2C_MAIN_BUS_SDA_PIN   3
 
+    #define I2C_MAIN_BUS_SCL_GPIO  GPIOD
     #define I2C_MAIN_BUS_SCL_PORT  PORTD
     #define I2C_MAIN_BUS_SCL_CLOCK kCLOCK_PortD
     #define I2C_MAIN_BUS_SCL_PIN   2
@@ -40,11 +43,12 @@
 // Variables:
 
     extern i2c_master_handle_t I2cMasterHandle;
-    extern bool IsI2cTransferScheduled;
 
 // Functions:
 
-    void I2cAsyncWrite(uint8_t i2cAddress, uint8_t *data, size_t dataSize);
-    void I2cAsyncRead(uint8_t i2cAddress, uint8_t *data, size_t dataSize);
+    status_t I2cAsyncWrite(uint8_t i2cAddress, uint8_t *data, size_t dataSize);
+    status_t I2cAsyncRead(uint8_t i2cAddress, uint8_t *data, size_t dataSize);
+    status_t I2cAsyncWriteMessage(uint8_t i2cAddress, i2c_message_t *message);
+    status_t I2cAsyncReadMessage(uint8_t i2cAddress, i2c_message_t *message);
 
 #endif

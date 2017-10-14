@@ -4,6 +4,7 @@
 // Includes:
 
     #include <stdint.h>
+    #include "attributes.h"
     #include "lufa/HIDClassCommon.h"
     #include "usb_composite_device.h"
     #include "main.h"
@@ -61,15 +62,6 @@
         MouseScroll_Right = 1 << 3,
     } mouse_scroll_t;
 
-    typedef enum {
-        TestAction_DisableUsb,
-        TestAction_DisableI2c,
-        TestAction_DisableKeyMatrixScan,
-        TestAction_DisableLedSdb,
-        TestAction_DisableLedFetPwm,
-        TestAction_DisableLedDriverPwm,
-    } test_action_t;
-
     typedef struct {
         uint8_t type;
         union {
@@ -78,30 +70,27 @@
                 uint8_t longPressAction;
                 uint8_t modifiers;
                 uint16_t scancode;
-            } __attribute__ ((packed)) keystroke;
+            } ATTR_PACKED keystroke;
             struct {
                 mouse_button_t buttonActions;
                 mouse_scroll_t scrollActions;
                 mouse_move_action_t moveActions;
-            } __attribute__ ((packed)) mouse;
+            } ATTR_PACKED mouse;
             struct {
                 bool isToggle;
                 uint8_t layer;
-            } __attribute__ ((packed)) switchLayer;
+            } ATTR_PACKED switchLayer;
             struct {
                 uint8_t keymapId;
-            } __attribute__ ((packed)) switchKeymap;
+            } ATTR_PACKED switchKeymap;
             struct {
-                uint16_t macroId;
-            } __attribute__ ((packed)) playMacro;
-            struct {
-                test_action_t testAction;
-            } __attribute__ ((packed)) test;
+                uint8_t macroId;
+            } ATTR_PACKED playMacro;
         };
-    } __attribute__ ((packed)) key_action_t;
+    } ATTR_PACKED key_action_t;
 
 // Variables:
 
-    extern void UpdateActiveUsbReports();
+    void UpdateActiveUsbReports(void);
 
 #endif

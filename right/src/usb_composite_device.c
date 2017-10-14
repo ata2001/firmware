@@ -4,7 +4,7 @@
 #include "usb_descriptors/usb_descriptor_strings.h"
 #include "bootloader_config.h"
 #include "bus_pal_hardware.h"
-#include "wormhole.h"
+#include "bootloader/wormhole.h"
 
 static usb_status_t UsbDeviceCallback(usb_device_handle handle, uint32_t event, void *param);
 usb_composite_device_t UsbCompositeDevice;
@@ -106,7 +106,7 @@ void USB0_IRQHandler(void)
         : UsbCompositeDevice.deviceHandle);
 }
 
-void InitUsb()
+void InitUsb(void)
 {
     uint8_t usbDeviceKhciIrq[] = USB_IRQS;
     uint8_t irqNumber = usbDeviceKhciIrq[CONTROLLER_ID - kUSB_ControllerKhci0];

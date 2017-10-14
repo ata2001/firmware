@@ -44,17 +44,17 @@ static usb_media_keyboard_report_t usbMediaKeyboardReports[2];
 usb_media_keyboard_report_t* ActiveUsbMediaKeyboardReport = usbMediaKeyboardReports;
 bool IsUsbMediaKeyboardReportSent = false;
 
-usb_media_keyboard_report_t* getInactiveUsbMediaKeyboardReport()
+usb_media_keyboard_report_t* getInactiveUsbMediaKeyboardReport(void)
 {
     return ActiveUsbMediaKeyboardReport == usbMediaKeyboardReports ? usbMediaKeyboardReports+1 : usbMediaKeyboardReports;
 }
 
-void SwitchActiveUsbMediaKeyboardReport()
+void SwitchActiveUsbMediaKeyboardReport(void)
 {
     ActiveUsbMediaKeyboardReport = getInactiveUsbMediaKeyboardReport();
 }
 
-void ResetActiveUsbMediaKeyboardReport()
+void ResetActiveUsbMediaKeyboardReport(void)
 {
     memset(ActiveUsbMediaKeyboardReport, 0, USB_MEDIA_KEYBOARD_REPORT_LENGTH);
 }

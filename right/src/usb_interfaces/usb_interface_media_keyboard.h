@@ -24,7 +24,7 @@
 
     typedef struct {
         uint16_t scancodes[USB_MEDIA_KEYBOARD_MAX_KEYS];
-    } __attribute__ ((packed)) usb_media_keyboard_report_t;
+    } ATTR_PACKED usb_media_keyboard_report_t;
 
 // Variables:
 
@@ -34,11 +34,11 @@
 
 // Functions:
 
-    extern usb_status_t UsbMediaKeyboardCallback(class_handle_t handle, uint32_t event, void *param);
-    extern usb_status_t UsbMediaKeyboardSetConfiguration(class_handle_t handle, uint8_t configuration);
-    extern usb_status_t UsbMediaKeyboardSetInterface(class_handle_t handle, uint8_t interface, uint8_t alternateSetting);
+    usb_status_t UsbMediaKeyboardCallback(class_handle_t handle, uint32_t event, void *param);
+    usb_status_t UsbMediaKeyboardSetConfiguration(class_handle_t handle, uint8_t configuration);
+    usb_status_t UsbMediaKeyboardSetInterface(class_handle_t handle, uint8_t interface, uint8_t alternateSetting);
 
-    extern void ResetActiveUsbMediaKeyboardReport();
-    extern void SwitchActiveUsbMediaKeyboardReport();
+    void ResetActiveUsbMediaKeyboardReport(void);
+    void SwitchActiveUsbMediaKeyboardReport(void);
 
 #endif

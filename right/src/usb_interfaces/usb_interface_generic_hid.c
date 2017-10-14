@@ -44,7 +44,7 @@ usb_device_class_struct_t UsbGenericHidClass = {
 uint8_t GenericHidInBuffer[USB_GENERIC_HID_IN_BUFFER_LENGTH];
 uint8_t GenericHidOutBuffer[USB_GENERIC_HID_OUT_BUFFER_LENGTH];
 
-static usb_status_t UsbReceiveData()
+static usb_status_t UsbReceiveData(void)
 {
     return USB_DeviceHidRecv(UsbCompositeDevice.genericHidHandle,
                              USB_GENERIC_HID_ENDPOINT_OUT_INDEX,
@@ -60,7 +60,7 @@ usb_status_t UsbGenericHidCallback(class_handle_t handle, uint32_t event, void *
         case kUSB_DeviceHidEventSendResponse:
             break;
         case kUSB_DeviceHidEventRecvResponse:
-            usbProtocolHandler();
+            UsbProtocolHandler();
 
             USB_DeviceHidSend(UsbCompositeDevice.genericHidHandle,
                               USB_GENERIC_HID_ENDPOINT_IN_INDEX,

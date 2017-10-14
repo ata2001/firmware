@@ -52,6 +52,6 @@
 
 // Functions:
 
-    parser_error_t ParseKeymap(serialized_buffer_t *buffer);
+    parser_error_t ParseKeymap(config_buffer_t *buffer, uint8_t keymapIdx, uint8_t keymapCount, uint8_t macroCount);
 
 #endif

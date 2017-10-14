@@ -3,7 +3,7 @@
 
 // Includes:
 
-    //#include "fsl_gpio.h"
+    #include "fsl_gpio.h"
 
 // Macros:
 
@@ -22,6 +22,6 @@
 
 // Functions:
 
-    extern void InitTestLed(void);
+    void InitTestLed(void);
 
 #endif

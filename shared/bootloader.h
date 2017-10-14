@@ -5,8 +5,35 @@
 
     #include <stdint.h>
     #include <stddef.h>
+    #include "attributes.h"
+    #include "i2c_addresses.h"
+
+// Macros:
+
+    #define BOOTLOADER_TAG 0x6766636B
+    #define BOOTLOADER_TIMEOUT_MS 100
+    #define CLOCK_FLAG_HIGH_SPEED_MODE 0x01
+
+    #define DEFINE_BOOTLOADER_CONFIG_AREA(address) \
+        const ATTR_BOOTLOADER_CONFIG bootloader_config_t BootloaderConfig = { \
+            .tag = BOOTLOADER_TAG, \
+            .enabledPeripherals = EnabledBootloaderPeripherial_I2c, \
+            .i2cSlaveAddress = address, \
+            .peripheralDetectionTimeoutMs = BOOTLOADER_TIMEOUT_MS, \
+            .clockFlags = CLOCK_FLAG_HIGH_SPEED_MODE, \
+            .clockDivider = ~0 \
+    };
 
 // Typedefs:
+
+    typedef enum {
+        EnabledBootloaderPeripherial_Uart   = (1<<0),
+        EnabledBootloaderPeripherial_I2c    = (1<<1),
+        EnabledBootloaderPeripherial_Spi    = (1<<2),
+        EnabledBootloaderPeripherial_Can    = (1<<3),
+        EnabledBootloaderPeripherial_UsbHid = (1<<4),
+        EnabledBootloaderPeripherial_UsbMsc = (1<<7),
+    } enabled_bootloader_peripheral_t;
 
     typedef struct {
         uint32_t tag;                          // Magic number to verify bootloader configuration is valid. Must be set to 'kcfg'.
@@ -24,9 +51,8 @@
         uint8_t clockDivider; // Inverted value of the divider to use for core and bus clocks when in high speed mode.
     } bootloader_config_t;
 
-
 // Functions:
 
-    extern void JumpToBootloader(void);
+    void JumpToBootloader(void);
 
 #endif

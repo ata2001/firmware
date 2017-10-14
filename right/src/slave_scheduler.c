@@ -2,56 +2,96 @@
 #include "slave_scheduler.h"
 #include "slot.h"
 #include "main.h"
-#include "slave_drivers/slave_driver_led_driver.h"
-#include "slave_drivers/slave_driver_uhk_module.h"
+#include "slave_drivers/is31fl3731_driver.h"
+#include "slave_drivers/uhk_module_driver.h"
 #include "i2c.h"
 #include "i2c_addresses.h"
-#include "test_states.h"
 
-uint8_t currentSlaveId = 0;
+uint32_t I2cSchedulerCounter;
+
+static uint8_t previousSlaveId;
+static uint8_t currentSlaveId;
 
 uhk_slave_t Slaves[] = {
-    { .initializer = UhkModuleSlaveDriver_Init, .updater = UhkModuleSlaveDriver_Update, .perDriverId = 0 },
-    { .initializer = LedSlaveDriver_Init,       .updater = LedSlaveDriver_Update,       .perDriverId = 0 },
-    { .initializer = LedSlaveDriver_Init,       .updater = LedSlaveDriver_Update,       .perDriverId = 1 },
+    {
+        .init = UhkModuleSlaveDriver_Init,
+        .update = UhkModuleSlaveDriver_Update,
+        .disconnect = UhkModuleSlaveDriver_Disconnect,
+        .perDriverId = UhkModuleDriverId_LeftKeyboardHalf,
+    },
+    {
+        .init = UhkModuleSlaveDriver_Init,
+        .update = UhkModuleSlaveDriver_Update,
+        .perDriverId = UhkModuleDriverId_LeftAddon,
+    },
+    {
+        .init = UhkModuleSlaveDriver_Init,
+        .update = UhkModuleSlaveDriver_Update,
+        .perDriverId = UhkModuleDriverId_RightAddon,
+    },
+    {
+        .init = LedSlaveDriver_Init,
+        .update = LedSlaveDriver_Update,
+        .perDriverId = LedDriverId_Right,
+    },
+    {
+        .init = LedSlaveDriver_Init,
+        .update = LedSlaveDriver_Update,
+        .perDriverId = LedDriverId_Left,
+    },
 };
 
-static void bridgeProtocolCallback(I2C_Type *base, i2c_master_handle_t *handle, status_t status, void *userData)
+static void slaveSchedulerCallback(I2C_Type *base, i2c_master_handle_t *handle, status_t previousStatus, void *userData)
 {
-    IsI2cTransferScheduled = false;
+    bool isFirstIteration = true;
+    bool isTransferScheduled = false;
+    I2cSchedulerCounter++;
 
     do {
-        if (TestStates.disableI2c) {
-            return;
-        }
-        uhk_slave_t *slave = Slaves + currentSlaveId;
+        uhk_slave_t *previousSlave = Slaves + previousSlaveId;
+        uhk_slave_t *currentSlave = Slaves + currentSlaveId;
 
-        slave->isConnected = status == kStatus_Success;
-        if (!slave->isConnected) {
-            slave->initializer(slave->perDriverId);
+        if (isFirstIteration) {
+            bool wasPreviousSlaveConnected = previousSlave->isConnected;
+            previousSlave->isConnected = previousStatus == kStatus_Success;
+            if (wasPreviousSlaveConnected && !previousSlave->isConnected && previousSlave->disconnect) {
+                previousSlave->disconnect(previousSlaveId);
+            }
+            isFirstIteration = false;
         }
 
-        slave->updater(slave->perDriverId);
-        currentSlaveId++;
+        if (!currentSlave->isConnected) {
+            currentSlave->init(currentSlave->perDriverId);
+        }
+
+        status_t currentStatus = currentSlave->update(currentSlave->perDriverId);
+        isTransferScheduled = currentStatus != kStatus_Uhk_IdleSlave && currentStatus != kStatus_Uhk_NoTransfer;
+        if (isTransferScheduled) {
+            currentSlave->isConnected = true;
+        }
+
+        if (currentStatus != kStatus_Uhk_NoTransfer) {
+            previousSlaveId = currentSlaveId++;
+        }
 
         if (currentSlaveId >= (sizeof(Slaves) / sizeof(uhk_slave_t))) {
             currentSlaveId = 0;
         }
-    } while (!IsI2cTransferScheduled);
+    } while (!isTransferScheduled);
 }
 
-static void initSlaveDrivers()
+void InitSlaveScheduler(void)
 {
+    previousSlaveId = 0;
+    currentSlaveId = 0;
+
     for (uint8_t i=0; i<sizeof(Slaves) / sizeof(uhk_slave_t); i++) {
-        Slaves[i].initializer(Slaves[i].perDriverId);
+        uhk_slave_t *currentSlave = Slaves + i;
+        currentSlave->isConnected = false;
     }
-}
 
-void InitSlaveScheduler()
-{
-    initSlaveDrivers();
-    I2C_MasterTransferCreateHandle(I2C_MAIN_BUS_BASEADDR, &I2cMasterHandle, bridgeProtocolCallback, NULL);
+    I2C_MasterTransferCreateHandle(I2C_MAIN_BUS_BASEADDR, &I2cMasterHandle, slaveSchedulerCallback, NULL);
 
-    // Kickstart the scheduler by triggering the first callback.
-    Slaves[0].updater(Slaves[0].perDriverId);
+    // Kickstart the scheduler by triggering the first transfer.
+    slaveSchedulerCallback(I2C_MAIN_BUS_BASEADDR, &I2cMasterHandle, kStatus_Fail, NULL);
 }

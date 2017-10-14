@@ -4,6 +4,7 @@
 // Includes:
 
     #include "fsl_common.h"
+    #include "attributes.h"
     #include "usb_api.h"
     #include "usb_descriptors/usb_descriptor_system_keyboard_report.h"
 
@@ -24,7 +25,7 @@
 
     typedef struct {
         uint8_t scancodes[USB_SYSTEM_KEYBOARD_MAX_KEYS];
-    } __attribute__ ((packed)) usb_system_keyboard_report_t;
+    } ATTR_PACKED usb_system_keyboard_report_t;
 
 // Variables:
 
@@ -34,11 +35,11 @@
 
 // Functions:
 
-    extern usb_status_t UsbSystemKeyboardCallback(class_handle_t handle, uint32_t event, void *param);
-    extern usb_status_t UsbSystemKeyboardSetConfiguration(class_handle_t handle, uint8_t configuration);
-    extern usb_status_t UsbSystemKeyboardSetInterface(class_handle_t handle, uint8_t interface, uint8_t alternateSetting);
+    usb_status_t UsbSystemKeyboardCallback(class_handle_t handle, uint32_t event, void *param);
+    usb_status_t UsbSystemKeyboardSetConfiguration(class_handle_t handle, uint8_t configuration);
+    usb_status_t UsbSystemKeyboardSetInterface(class_handle_t handle, uint8_t interface, uint8_t alternateSetting);
 
-    extern void ResetActiveUsbSystemKeyboardReport();
-    extern void SwitchActiveUsbSystemKeyboardReport();
+    void ResetActiveUsbSystemKeyboardReport(void);
+    void SwitchActiveUsbSystemKeyboardReport(void);
 
 #endif

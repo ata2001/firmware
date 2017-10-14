@@ -1,8 +1,9 @@
+#include "config.h"
 #include "main.h"
 #include "init_clock.h"
 #include "init_peripherals.h"
 #include "usb_composite_device.h"
-#include "led_driver.h"
+#include "peripherals/led_driver.h"
 #include "key_action.h"
 #include "slave_scheduler.h"
 #include "peripherals/test_led.h"
@@ -11,8 +12,8 @@
 #include "bus_pal_hardware.h"
 #include "bootloader_config.h"
 #include "command.h"
-#include "test_states.h"
-#include "wormhole.h"
+#include "bootloader/wormhole.h"
+#include "eeprom.h"
 
 key_matrix_t KeyMatrix = {
     .colNum = KEYBOARD_MATRIX_COLS_NUM,
@@ -37,7 +38,7 @@ key_matrix_t KeyMatrix = {
 
 uint8_t CurrentKeyStates[SLOT_COUNT][MAX_KEY_COUNT_PER_MODULE];
 
-void UpdateUsbReports()
+void UpdateUsbReports(void)
 {
     if (!IsUsbBasicKeyboardReportSent) {
         return;
@@ -47,11 +48,9 @@ void UpdateUsbReports()
     ResetActiveUsbMediaKeyboardReport();
     ResetActiveUsbSystemKeyboardReport();
 
-    if (!TestStates.disableKeyMatrixScan) {
-        KeyMatrix_Scan(&KeyMatrix);
-    }
+    KeyMatrix_Scan(&KeyMatrix);
 
-    memcpy(CurrentKeyStates[SLOT_ID_RIGHT_KEYBOARD_HALF], KeyMatrix.keyStates, MAX_KEY_COUNT_PER_MODULE);
+    memcpy(CurrentKeyStates[SlotId_RightKeyboardHalf], KeyMatrix.keyStates, MAX_KEY_COUNT_PER_MODULE);
     UpdateActiveUsbReports();
 
     SwitchActiveUsbBasicKeyboardReport();
@@ -61,24 +60,47 @@ void UpdateUsbReports()
     IsUsbBasicKeyboardReportSent = false;
 }
 
-void main() {
-    InitPeripherials();
+bool IsEepromInitialized = false;
+bool IsConfigInitialized = false;
+
+void userConfigurationReadFinished(void)
+{
+    IsEepromInitialized = true;
+}
+
+void hardwareConfigurationReadFinished(void)
+{
+    EEPROM_LaunchTransfer(EepromOperation_Read, ConfigBufferId_StagingUserConfig, userConfigurationReadFinished);
+}
+
+void main(void)
+{
     InitClock();
+    InitPeripherals();
+    EEPROM_LaunchTransfer(EepromOperation_Read, ConfigBufferId_HardwareConfig, hardwareConfigurationReadFinished);
+
+#ifdef FORCE_BUSPAL
+    Wormhole.magicNumber = WORMHOLE_MAGIC_NUMBER;
+    Wormhole.enumerationMode = EnumerationMode_BusPal;
+#endif
 
     if (Wormhole.magicNumber == WORMHOLE_MAGIC_NUMBER && Wormhole.enumerationMode == EnumerationMode_BusPal) {
         Wormhole.magicNumber = 0;
         init_hardware();
         handleUsbBusPalCommand();
     } else {
-        LedDriver_InitAllLeds(1);
         InitSlaveScheduler();
         KeyMatrix_Init(&KeyMatrix);
         UpdateUsbReports();
         InitUsb();
 
         while (1) {
+            if (!IsConfigInitialized && IsEepromInitialized) {
+                ApplyConfig();
+                IsConfigInitialized = true;
+            }
             UpdateUsbReports();
-            asm("wfi");
+            __WFI();
         }
     }
 }

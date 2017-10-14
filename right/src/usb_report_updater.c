@@ -3,18 +3,17 @@
 #include "led_display.h"
 #include "layer.h"
 #include "usb_interfaces/usb_interface_mouse.h"
-#include "current_keymap.h"
-#include "test_states.h"
+#include "keymaps.h"
 #include "peripherals/test_led.h"
-#include "slave_drivers/slave_driver_led_driver.h"
-#include "slave_drivers/slave_driver_uhk_module.h"
+#include "slave_drivers/is31fl3731_driver.h"
+#include "slave_drivers/uhk_module_driver.h"
 #include "led_pwm.h"
+#include "macros.h"
 
 static uint8_t mouseWheelDivisorCounter = 0;
 static uint8_t mouseSpeedAccelDivisorCounter = 0;
 static uint8_t mouseSpeed = 3;
 static bool wasPreviousMouseActionWheelAction = false;
-test_states_t TestStates;
 
 void processMouseAction(key_action_t action)
 {
@@ -73,41 +72,7 @@ void processMouseAction(key_action_t action)
     wasPreviousMouseActionWheelAction = isWheelAction;
 }
 
-void processTestAction(key_action_t testAction)
-{
-    switch (testAction.test.testAction) {
-    case TestAction_DisableUsb:
-        if (kStatus_USB_Success != USB_DeviceClassDeinit(CONTROLLER_ID)) {
-            return;
-        }
-        // Make sure we are clocking to the peripheral to ensure there are no bus errors
-        if (SIM->SCGC4 & SIM_SCGC4_USBOTG_MASK) {
-            NVIC_DisableIRQ(USB0_IRQn);           // Disable the USB interrupt
-            NVIC_ClearPendingIRQ(USB0_IRQn);      // Clear any pending interrupts on USB
-            SIM->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK; // Turn off clocking to USB
-        }
-        break;
-    case TestAction_DisableI2c:
-        TestStates.disableI2c = true;
-        break;
-    case TestAction_DisableKeyMatrixScan:
-        TestStates.disableKeyMatrixScan = true;
-        break;
-    case TestAction_DisableLedDriverPwm:
-        SetLeds(0);
-        break;
-    case TestAction_DisableLedFetPwm:
-        LedPwm_SetBrightness(0);
-        UhkModuleStates[0].ledPwmBrightness = 0;
-        break;
-    case TestAction_DisableLedSdb:
-        GPIO_WritePinOutput(LED_DRIVER_SDB_GPIO, LED_DRIVER_SDB_PIN, 0);
-        TestStates.disableLedSdb = true;
-        break;
-    }
-}
-
-uint8_t getActiveLayer()
+uint8_t getActiveLayer(void)
 {
     uint8_t activeLayer = LAYER_ID_BASE;
     for (uint8_t slotId=0; slotId<SLOT_COUNT; slotId++) {
@@ -123,7 +88,7 @@ uint8_t getActiveLayer()
     return activeLayer;
 }
 
-void UpdateActiveUsbReports()
+void UpdateActiveUsbReports(void)
 {
 
     memset(&UsbMouseReport, 0, sizeof(usb_mouse_report_t));
@@ -134,8 +99,18 @@ void UpdateActiveUsbReports()
 
     static uint8_t previousLayer = LAYER_ID_BASE;
     static uint8_t previousModifiers = 0;
-    uint8_t activeLayer = getActiveLayer();
+    uint8_t activeLayer;
 
+    if (MacroPlaying) {
+        Macros_ContinueMacro();
+        memcpy(&UsbMouseReport, &MacroMouseReport, sizeof MacroMouseReport);
+        memcpy(&ActiveUsbBasicKeyboardReport, &MacroBasicKeyboardReport, sizeof MacroBasicKeyboardReport);
+        memcpy(&ActiveUsbMediaKeyboardReport, &MacroMediaKeyboardReport, sizeof MacroMediaKeyboardReport);
+        memcpy(&ActiveUsbSystemKeyboardReport, &MacroSystemKeyboardReport, sizeof MacroSystemKeyboardReport);
+        return;
+    }
+    activeLayer = getActiveLayer();
+    LedDisplay_SetLayer(activeLayer);
     for (uint8_t slotId=0; slotId<SLOT_COUNT; slotId++) {
         for (uint8_t keyId=0; keyId<MAX_KEY_COUNT_PER_MODULE; keyId++) {
 
@@ -172,8 +147,8 @@ void UpdateActiveUsbReports()
                 case KeyActionType_Mouse:
                     processMouseAction(action);
                     break;
-                case KeyActionType_Test:
-                    processTestAction(action);
+                case KeyActionType_SwitchKeymap:
+                    Keymaps_Switch(action.switchKeymap.keymapId);
                     break;
             }
         }

@@ -8,17 +8,18 @@
 #include "main.h"
 #include "init_peripherals.h"
 #include "bool_array_converter.h"
+#include "bootloader.h"
+#include "module.h"
 
-uint8_t SlaveRxBuffer[SLAVE_RX_BUFFER_SIZE];
-uint8_t SlaveTxBuffer[SLAVE_TX_BUFFER_SIZE];
-uint8_t SlaveTxSize;
+i2c_message_t RxMessage;
+i2c_message_t TxMessage;
 
 void SetError(uint8_t error);
 void SetGenericError(void);
 void SetResponseByte(uint8_t response);
 
 void SetError(uint8_t error) {
-    SlaveTxBuffer[0] = error;
+    TxMessage.data[0] = error;
 }
 
 void SetGenericError(void)
@@ -29,35 +30,71 @@ void SetGenericError(void)
 // Set a single byte as the response.
 void SetResponseByte(uint8_t response)
 {
-    SlaveTxBuffer[1] = response;
+    TxMessage.data[1] = response;
 }
 
-void SlaveProtocolHandler(void)
+void SlaveRxHandler(void)
 {
-    uint8_t commandId = SlaveRxBuffer[0];
+    if (!CRC16_IsMessageValid(&RxMessage)) {
+        TxMessage.length = 0;
+        return;
+    }
+
+    uint8_t commandId = RxMessage.data[0];
     switch (commandId) {
-        case SlaveCommand_GetKeyStates:
-            SlaveTxSize = KEY_STATE_BUFFER_SIZE;
-            BoolBytesToBits(keyMatrix.keyStates, SlaveTxBuffer, LEFT_KEYBOARD_HALF_KEY_COUNT);
-            CRC16_AppendToMessage(SlaveTxBuffer, KEY_STATE_SIZE);
+        case SlaveCommand_JumpToBootloader:
+            JumpToBootloader();
             break;
         case SlaveCommand_SetTestLed:
-            SlaveTxSize = 0;
-            bool isLedOn = SlaveRxBuffer[1];
+            TxMessage.length = 0;
+            bool isLedOn = RxMessage.data[1];
             TEST_LED_SET(isLedOn);
             break;
         case SlaveCommand_SetLedPwmBrightness:
-            SlaveTxSize = 0;
-            uint8_t brightnessPercent = SlaveRxBuffer[1];
+            TxMessage.length = 0;
+            uint8_t brightnessPercent = RxMessage.data[1];
             LedPwm_SetBrightness(brightnessPercent);
             break;
-        case SlaveCommand_SetDisableKeyMatrixScanState:
-            SlaveTxSize = 0;
-            DisableKeyMatrixScanState = SlaveRxBuffer[1];
+    }
+}
+
+void SlaveTxHandler(void)
+{
+    uint8_t commandId = RxMessage.data[0];
+    switch (commandId) {
+        case SlaveCommand_RequestProperty: {
+            uint8_t propertyId = RxMessage.data[1];
+            switch (propertyId) {
+                case SlaveProperty_Sync: {
+                    memcpy(TxMessage.data, SlaveSyncString, SLAVE_SYNC_STRING_LENGTH);
+                    TxMessage.length = SLAVE_SYNC_STRING_LENGTH;
+                    break;
+                }
+                case SlaveProperty_ModuleId: {
+                    TxMessage.data[0] = MODULE_ID;
+                    TxMessage.length = 1;
+                    break;
+                }
+                case SlaveProperty_ProtocolVersion: {
+                    TxMessage.data[0] = MODULE_PROTOCOL_VERSION;
+                    TxMessage.length = 1;
+                    break;
+                }
+                case SlaveProperty_Features: {
+                    uhk_module_features_t *moduleFeatures = (uhk_module_features_t*)&TxMessage.data;
+                    moduleFeatures->keyCount = MODULE_KEY_COUNT;
+                    moduleFeatures->hasPointer = MODULE_HAS_POINTER;
+                    TxMessage.length = sizeof(uhk_module_features_t);
+                    break;
+                }
+            }
             break;
-        case SlaveCommand_SetDisableLedSdb:
-            SlaveTxSize = 0;
-            GPIO_WritePinOutput(LED_DRIVER_SDB_GPIO, LED_DRIVER_SDB_PIN, SlaveRxBuffer[1] ? 0 : 1);
+        }
+        case SlaveCommand_RequestKeyStates:
+            BoolBytesToBits(keyMatrix.keyStates, TxMessage.data, MODULE_KEY_COUNT);
+            TxMessage.length = BOOL_BYTES_TO_BITS_COUNT(MODULE_KEY_COUNT);
             break;
     }
+
+    CRC16_UpdateMessageChecksum(&TxMessage);
 }

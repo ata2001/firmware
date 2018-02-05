@@ -399,7 +399,7 @@ static usb_status_t USB_DeviceCh9GetDescriptor(usb_device_common_class_struct_t 
         error = USB_DeviceClassCallback(classHandle->handle, kUSB_DeviceEventGetStringDescriptor,
                                         &commonDescriptor.stringDescriptor);
     }
-#if (defined(USB_DEVICE_CONFIG_HID) && (USB_DEVICE_CONFIG_HID > 0U))
+#if (defined(USB_DEVICE_CONFIG_INTERFACE_COUNT) && (USB_DEVICE_CONFIG_INTERFACE_COUNT > 0U))
     else if (USB_DESCRIPTOR_TYPE_HID == descriptorType)
     {
         /* Get the hid descriptor */

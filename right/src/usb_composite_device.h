@@ -23,7 +23,7 @@
         class_handle_t systemKeyboardHandle;
         uint8_t attach;
         uint8_t currentConfiguration;
-        uint8_t currentInterfaceAlternateSetting[USB_DEVICE_CONFIG_HID];
+        uint8_t currentInterfaceAlternateSetting[USB_DEVICE_CONFIG_INTERFACE_COUNT];
     } usb_composite_device_t;
 
 // Variables:

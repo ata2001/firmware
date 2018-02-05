@@ -63,4 +63,10 @@
     #define HID_RI_COLLECTION_APPLICATION 0x01
     #define HID_RI_COLLECTION_LOGICAL     0x02
 
+    // XInput related constants
+
+    #define USB_CLASS_XINPUT             0xff
+    #define USB_SUBCLASS_XINPUT          0x5d
+    #define USB_PROTOCOL_XINPUT          1
+
 #endif

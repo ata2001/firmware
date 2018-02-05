@@ -34,7 +34,7 @@
 
 #include "usb_device_class.h"
 
-#if ((defined(USB_DEVICE_CONFIG_HID)) && (USB_DEVICE_CONFIG_HID > 0U))
+#if ((defined(USB_DEVICE_CONFIG_INTERFACE_COUNT)) && (USB_DEVICE_CONFIG_INTERFACE_COUNT > 0U))
 #include "usb_device_hid.h"
 
 /*******************************************************************************
@@ -60,7 +60,7 @@ static usb_status_t USB_DeviceHidEndpointsDeinit(usb_device_hid_struct_t *hidHan
  * Variables
  ******************************************************************************/
 
-USB_GLOBAL static usb_device_hid_struct_t s_UsbDeviceHidHandle[USB_DEVICE_CONFIG_HID];
+USB_GLOBAL static usb_device_hid_struct_t s_UsbDeviceHidHandle[USB_DEVICE_CONFIG_INTERFACE_COUNT];
 
 /*******************************************************************************
  * Code
@@ -79,7 +79,7 @@ USB_GLOBAL static usb_device_hid_struct_t s_UsbDeviceHidHandle[USB_DEVICE_CONFIG
 static usb_status_t USB_DeviceHidAllocateHandle(usb_device_hid_struct_t **handle)
 {
     int32_t count;
-    for (count = 0U; count < USB_DEVICE_CONFIG_HID; count++)
+    for (count = 0U; count < USB_DEVICE_CONFIG_INTERFACE_COUNT; count++)
     {
         if (NULL == s_UsbDeviceHidHandle[count].handle)
         {

@@ -37,7 +37,7 @@
 
 #if ((defined(USB_DEVICE_CONFIG_NUM)) && (USB_DEVICE_CONFIG_NUM > 0U))
 /* Include the class drivers according to the usb_device_config.h. */
-#if ((defined(USB_DEVICE_CONFIG_HID)) && (USB_DEVICE_CONFIG_HID > 0U))
+#if ((defined(USB_DEVICE_CONFIG_INTERFACE_COUNT)) && (USB_DEVICE_CONFIG_INTERFACE_COUNT > 0U))
 #include "usb_device_hid.h"
 #endif
 
@@ -95,7 +95,7 @@ static usb_status_t USB_DeviceClassGetHandleByDeviceHandle(usb_device_handle dev
 
 /* The device class driver list. */
 static const usb_device_class_map_t s_UsbDeviceClassInterfaceMap[] = {
-#if ((defined(USB_DEVICE_CONFIG_HID)) && (USB_DEVICE_CONFIG_HID > 0U))
+#if ((defined(USB_DEVICE_CONFIG_INTERFACE_COUNT)) && (USB_DEVICE_CONFIG_INTERFACE_COUNT > 0U))
     {USB_DeviceHidInit, USB_DeviceHidDeinit, USB_DeviceHidEvent, kUSB_DeviceClassTypeHid},
 #endif
 
